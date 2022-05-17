@@ -32,7 +32,7 @@ module Spree
                    else
                      products.not_e_gift_cards
                    end
-        @gift_card_variant_id = products.first.master.id
+        @gift_card_variant_id = products&.first&.master&.id
       end
 
       def gift_card_params

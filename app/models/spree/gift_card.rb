@@ -1,7 +1,5 @@
-require 'spree/core/validators/email'
-
 module Spree
-  class GiftCard < ActiveRecord::Base
+  class GiftCard < Spree::Base
     include CalculatedAdjustments
     include Spree::GiftCard::Users
 
@@ -212,8 +210,8 @@ module Spree
     end
 
     def set_values
-      self.current_value ||= line_item.try(:price)
-      self.original_value ||= line_item.try(:price)
+      self.current_value ||= self.variant.try(:price)
+      self.original_value ||= self.variant.try(:price)
     end
 
     def amount_remaining_is_positive

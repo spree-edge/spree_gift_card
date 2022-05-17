@@ -1,21 +1,21 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_gift_card'
-  s.version     = '3.3.0'
+  s.version     = '4.0.0'
   s.summary     = 'Spree Gift Card'
   s.description = 'Spree Gift Card Extension'
 
-  s.authors     = ['Wojtek']
-  s.email       = ['wojtek@praesens.co']
-  s.homepage    = 'https://github.com/praesensco/spree_gift_card'
+  s.authors     = ['Rahul Singh']
+  s.email       = ['rahul@bluebash.co']
+  s.homepage    = 'https://github.com/bluebash-spree-contrib/spree_gift_card'
 
-  spree_version = '~> 3.3.0'
+  spree_version = '~> 4.1.3'
 
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
 
   s.require_path = 'lib'
-  s.required_ruby_version = '>= 2.2.0'
+  s.required_ruby_version = '>= 2.2.7'
   s.requirements << 'none'
 
   s.add_dependency 'spree_api',         spree_version

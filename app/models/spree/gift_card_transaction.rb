@@ -1,4 +1,4 @@
-class Spree::GiftCardTransaction < ActiveRecord::Base
+class Spree::GiftCardTransaction < Spree::Base
   belongs_to :gift_card
   belongs_to :order
 
