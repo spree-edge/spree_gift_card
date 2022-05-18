@@ -3,15 +3,13 @@
 require_dependency 'spree/calculator'
 
 module Spree
-  module Calculator
-    class GiftCardCalculator < Calculator
-      def self.description
-        Spree.t(:gift_card_calculator)
-      end
+  class Calculator::GiftCardCalculator < Calculator
+    def self.description
+      Spree.t(:gift_card_calculator)
+    end
 
-      def compute(order, gift_card)
-        [order.total, gift_card.current_value].min * -1
-      end
+    def compute(order, gift_card)
+      [order.total, gift_card.current_value].min * -1
     end
   end
 end
