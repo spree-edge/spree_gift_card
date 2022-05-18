@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module Spree
   class GiftCard < Spree::Base
     include CalculatedAdjustments
     include Spree::GiftCard::Users
 
     UNACTIVATABLE_ORDER_STATES = %w[complete awaiting_return returned].freeze
-    AUTHORIZE_ACTION = 'authorize'.freeze
-    CAPTURE_ACTION = 'capture'.freeze
-    VOID_ACTION = 'void'.freeze
-    CREDIT_ACTION = 'credit'.freeze
+    AUTHORIZE_ACTION = 'authorize'
+    CAPTURE_ACTION = 'capture'
+    VOID_ACTION = 'void'
+    CREDIT_ACTION = 'credit'
     VALUES = [50, 100, 150, 200, 250, 300, 500, 1000].freeze
 
     belongs_to :variant
@@ -59,6 +61,7 @@ module Spree
       authorization_code = options[:action_authorization_code]
       if authorization_code
         return true if transactions.find_by(action: AUTHORIZE_ACTION, authorization_code: authorization_code)
+
         errors.add(:base, Spree.t('gift_card_payment_method.unable_to_capture', auth_code: authorization_code))
         return false
       else
@@ -66,7 +69,8 @@ module Spree
       end
 
       if valid_authorization?(amount)
-        transaction = transactions.build(action: AUTHORIZE_ACTION, amount: amount, authorization_code: authorization_code)
+        transaction = transactions.build(action: AUTHORIZE_ACTION, amount: amount,
+                                         authorization_code: authorization_code)
         transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
         self.authorized_amount = authorized_amount + amount
         save!
@@ -87,6 +91,7 @@ module Spree
 
     def capture(amount, authorization_code, options = {})
       return false unless authorize(amount, action_authorization_code: authorization_code)
+
       if amount <= authorized_amount
         transaction = transactions.build(action: CAPTURE_ACTION, amount: amount, authorization_code: authorization_code)
         transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
@@ -135,7 +140,10 @@ module Spree
     end
 
     def debit(amount, order = nil)
-      raise 'Cannot debit gift card by amount greater than current value.' if (amount_remaining - amount.to_f.abs) < 0
+      if (amount_remaining - amount.to_f.abs).negative?
+        raise 'Cannot debit gift card by amount greater than current value.'
+      end
+
       transaction = transactions.build
       transaction.amount = amount
       transaction.order  = order if order
@@ -150,7 +158,7 @@ module Spree
     def order_activatable?(order)
       order &&
         created_at < order.created_at &&
-        current_value > 0 &&
+        current_value.positive? &&
         !UNACTIVATABLE_ORDER_STATES.include?(order.state)
     end
 
@@ -210,8 +218,8 @@ module Spree
     end
 
     def set_values
-      self.current_value ||= self.variant.try(:price)
-      self.original_value ||= self.variant.try(:price)
+      self.current_value ||= variant.try(:price)
+      self.original_value ||= variant.try(:price)
     end
 
     def amount_remaining_is_positive

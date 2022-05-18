@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module CheckoutControllerDecorator
     def self.prepended(base)
@@ -21,20 +23,19 @@ module Spree
       if @order.payments.valid.sum(:amount) < @order.total
         redirect_to checkout_state_path(@order.state)
         flash[:success] = Spree.t('gift_card_added_partial')
-        return
+        nil
       else
         flash[:success] = Spree.t('gift_card_added')
       end
     end
 
     def payment_via_gift_card?
-      params[:state] == 'payment' &&
-        params[:order].fetch(:payments_attributes, {}).present? &&
-        params[:order][:payments_attributes].select { |payments_attribute| gift_card_payment_method.try(:id).to_s == payments_attribute[:payment_method_id] }.present?
+      params[:state] == 'payment' && params[:order].fetch(:payments_attributes,
+                                                          {}).present? && params[:order][:gift_code].present?
     end
 
     def load_gift_card
-      @gift_card = Spree::GiftCard.find_by(code: params[:payment_source][gift_card_payment_method.try(:id).to_s][:code])
+      @gift_card = Spree::GiftCard.find_by(code: params[:order][:gift_code])
       if @gift_card.nil?
         @gift_card = import_integrated_gift_card
       else
@@ -42,6 +43,7 @@ module Spree
       end
 
       return if @gift_card
+
       redirect_to checkout_state_path(@order.state), flash: { error: Spree.t('gift_code_not_found') } and return
     end
 

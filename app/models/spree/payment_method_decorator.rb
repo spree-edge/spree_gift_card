@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module PaymentMethodDecorator
     def self.prepended(base)
@@ -5,7 +7,7 @@ module Spree
     end
 
     def gift_card?
-      self.class == Spree::PaymentMethod::GiftCard
+      instance_of?(Spree::PaymentMethod::GiftCard)
     end
   end
 end

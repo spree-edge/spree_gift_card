@@ -1,4 +1,6 @@
-module Spree 
+# frozen_string_literal: true
+
+module Spree
   module LineItemDecorator
     MAXIMUM_GIFT_CARD_LIMIT ||= 1
 
@@ -13,10 +15,7 @@ module Spree
       base.delegate :is_gift_card?, to: :product
       base.delegate :is_e_gift_card?, to: :product
     end
-
   end
-
-
 end
 
 ::Spree::LineItem.prepend(Spree::LineItemDecorator)

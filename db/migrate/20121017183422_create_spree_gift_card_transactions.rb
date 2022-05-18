@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSpreeGiftCardTransactions < ActiveRecord::Migration[4.2]
   def change
     unless table_exists? :spree_gift_card_transactions

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module OrderDecorator
     def self.prepended(base)
@@ -5,6 +7,5 @@ module Spree
     end
   end
 end
-
 
 ::Spree::Order.prepend(Spree::OrderDecorator)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module QuantifierCanSupply
     def can_supply?(required = 1)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :spree do
   namespace :gift_card do
     desc 'Send GiftCard Emails'

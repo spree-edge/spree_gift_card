@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   # GiftCard class enhancement
   class GiftCard < Spree::Base

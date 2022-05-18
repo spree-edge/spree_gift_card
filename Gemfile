@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 git_source(:github) do |repo_name|
@@ -5,9 +7,9 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'spree', '~> 4.1.3'
 gem 'rails-controller-testing'
-gem 'rubocop-rails', require: false
+gem 'rubocop-rails', '~> 2.14', '>= 2.14.2'
+gem 'spree', '~> 4.1.3'
 
 group :test do
   gem 'timecop', '~> 0.8.1'

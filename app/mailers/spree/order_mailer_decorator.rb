@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module OrderMailerDecorator
     def gift_card_email(card_id, order_id)

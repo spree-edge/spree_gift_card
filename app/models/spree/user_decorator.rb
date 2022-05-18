@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module UserDecorator
     def self.prepended(base)
@@ -6,3 +8,5 @@ module Spree
     end
   end
 end
+
+::Spree::User.prepend(Spree::UserDecorator)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   class UserGiftCardsController < Spree::StoreController
     before_action :authorize

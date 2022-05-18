@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spree
   module OrderContentsDecorator
     def grab_line_item_by_variant(variant, raise_error = false, options = {})
