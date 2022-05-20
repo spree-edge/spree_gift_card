@@ -46,9 +46,10 @@ module Spree
         @gift_card.save!
       end
       redirect_to cart_path
-    rescue ActiveRecord::RecordInvalid
+    rescue => e
+      flash[:error] = e.message
       find_gift_card_variants
-      render :new
+      redirect_to new_gift_card_path
     end
 
     private
