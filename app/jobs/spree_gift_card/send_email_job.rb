@@ -5,19 +5,16 @@ module SpreeGiftCard
     queue_as :default
 
     def perform(*_args)
-      e_gift_card_product = Spree::Product.find_by_slug('e-gift-card')
-      return unless e_gift_card_product
+      gift_cards = Spree::GiftCard
+                   .deliverable
+                   .where.not(line_item: nil)
 
-      Spree::GiftCard
-        .deliverable
-        .where(variant: e_gift_card_product.master)
-        .where.not(line_item: nil)
-        .each do |gift_card|
-          next unless gift_card_shipped(gift_card)
+      gift_cards.each do |gift_card|
+        next unless gift_card_shipped(gift_card)
 
-          order = gift_card.line_item.order
-          Spree::OrderMailer.gift_card_email(gift_card.id, order).deliver_later
-        end
+        order_id = gift_card.line_item.order.id
+        Spree::OrderMailer.gift_card_email(gift_card.id, order_id).deliver_later
+      end
     end
 
     def gift_card_shipped(gift_card)
