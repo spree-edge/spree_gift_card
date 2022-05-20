@@ -14,3 +14,18 @@ Deface::Override.new(
             <% end %>
   HTML
 )
+
+Deface::Override.new(
+  virtual_path: 'spree/orders/_line_item_data',
+  name: 'add quantity to gift card',
+  insert_before: '[data-hook="cart_item_price"]',
+  text: <<-HTML
+            <% if line_item.gift_card.present? %>
+              <div class="d-flex align-items-center d-none">
+                <%= button_tag '-', type: 'button', class: "d-none border-right-0 shopping-cart-item-quantity-decrease-btn", data: { id: dom_id(line_item) } %>
+                <%= item_form.number_field :quantity, min: 0, class: " d-none form-control text-center border-left-0 border-right-0 shopping-cart-item-quantity-input", size: 5, data: { id: dom_id(line_item) } %>
+                <%= button_tag '+', type: 'button', class: "d-none border-left-0 shopping-cart-item-quantity-increase-btn", data: { id: dom_id(line_item) } %>
+              </div>
+            <% end %>
+  HTML
+)

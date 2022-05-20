@@ -21,7 +21,7 @@ module Spree
 
       # Return to the Payments page if additional payment is needed.
       if @order.payments.valid.sum(:amount) < @order.total
-        redirect_to checkout_state_path(@order.state)
+        redirect_to checkout_state_path(@order.next)
         flash[:success] = Spree.t('gift_card_added_partial')
         nil
       else
