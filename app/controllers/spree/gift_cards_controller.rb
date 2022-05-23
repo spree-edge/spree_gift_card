@@ -64,7 +64,7 @@ module Spree
     end
 
     def find_gift_card_variants
-      products = Product.not_deleted.gift_cards
+      products = Spree::Product.not_deleted.gift_cards
       products = if @is_e_gift_card
                    products.e_gift_cards
                  else
@@ -72,8 +72,16 @@ module Spree
                  end
       @gift_card_product = products.first
       gift_card_product_ids = products.pluck(:id)
-      @gift_card_variants = Variant.joins(:prices).where(['amount > 0 AND product_id IN (?)',
-                                                          gift_card_product_ids]).order('amount')
+
+      @gift_card_variants = []
+
+      products.each do |product|
+        @gift_card_variants += if product.variants.present?
+                                 product.variants.select(&:non_zero_price?)
+                               else
+                                 (product.master.price.positive? ? [product.master] : [])
+                               end
+      end
     end
 
     def gift_card_params
