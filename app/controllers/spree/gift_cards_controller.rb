@@ -82,6 +82,7 @@ module Spree
                                  (product.master.price.positive? ? [product.master] : [])
                                end
       end
+      @gift_card_variants = @gift_card_variants.sort_by(&:price)
     end
 
     def gift_card_params
