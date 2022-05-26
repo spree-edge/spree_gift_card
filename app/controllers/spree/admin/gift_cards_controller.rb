@@ -4,6 +4,7 @@ module Spree
   module Admin
     class GiftCardsController < Spree::Admin::ResourceController
       before_action :set_gift_card, :find_gift_card_variant, except: :destroy
+      before_action :find_gift_card, only: [:edit, :show, :update]
 
       def create
         @object.assign_attributes(gift_card_params)
@@ -13,7 +14,16 @@ module Spree
           flash[:success] = Spree.t(:successfully_created_gift_card)
           redirect_to admin_gift_cards_path
         else
-          render :new
+          redirect_to new_gift_card_path
+        end
+      end
+
+      def update
+        if @gift_card.update(gift_card_params)
+          flash[:success] = Spree.t(:successfully_updated_gift_card)
+          redirect_to admin_gift_cards_path
+        else
+          redirect_to admin_gift_cards_path
         end
       end
 
@@ -24,7 +34,7 @@ module Spree
       end
 
       def set_gift_card
-        @is_e_gift_card = request.path.include?('new-digital') || (params[:gift_card] && params[:gift_card][:e_gift_card] == 'true')
+        @is_e_gift_card = request.path.include?('new-digital') || (params[:gift_card].present? && params[:gift_card][:e_gift_card] == 'true')
       end
 
       def find_gift_card_variant
@@ -47,6 +57,10 @@ module Spree
           :sender_email,
           :delivery_on
         )
+      end
+
+      def find_gift_card
+        @gift_card = Spree::GiftCard.find_by(id: params[:id])
       end
     end
   end
