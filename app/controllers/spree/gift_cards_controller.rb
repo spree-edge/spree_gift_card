@@ -46,7 +46,7 @@ module Spree
         @gift_card.save!
       end
       redirect_to cart_path
-    rescue => e
+    rescue StandardError => e
       flash[:error] = e.message
       find_gift_card_variants
       redirect_to new_gift_card_path

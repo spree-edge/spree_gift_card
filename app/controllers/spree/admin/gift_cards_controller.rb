@@ -4,7 +4,7 @@ module Spree
   module Admin
     class GiftCardsController < Spree::Admin::ResourceController
       before_action :set_gift_card, :find_gift_card_variant, except: :destroy
-      before_action :find_gift_card, only: [:edit, :show, :update]
+      before_action :find_gift_card, only: %i[edit show update]
 
       def create
         @object.assign_attributes(gift_card_params)
@@ -19,12 +19,8 @@ module Spree
       end
 
       def update
-        if @gift_card.update(gift_card_params)
-          flash[:success] = Spree.t(:successfully_updated_gift_card)
-          redirect_to admin_gift_cards_path
-        else
-          redirect_to admin_gift_cards_path
-        end
+        flash[:success] = Spree.t(:successfully_updated_gift_card) if @gift_card.update(gift_card_params)
+        redirect_to admin_gift_cards_path
       end
 
       private

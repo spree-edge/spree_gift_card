@@ -30,12 +30,15 @@ module Spree
     end
 
     def payment_via_gift_card?
-      params[:state] == 'payment' && params[:order].fetch(:payments_attributes,
-                                                          {}).present? && params[:order][:gift_code].present?
+      params[:state] == 'payment' &&
+        params[:order].fetch(:payments_attributes, {}).present? &&
+        params[:order][:payments_attributes].select do |payments_attribute|
+          gift_card_payment_method.try(:id).to_s == payments_attribute[:payment_method_id]
+        end.present?
     end
 
     def load_gift_card
-      @gift_card = Spree::GiftCard.find_by(code: params[:order][:gift_code])
+      @gift_card = Spree::GiftCard.find_by(code: params[:payment_source][gift_card_payment_method.try(:id).to_s][:code])
       if @gift_card.nil?
         @gift_card = import_integrated_gift_card
       else
