@@ -15,6 +15,8 @@ module Spree
     belongs_to :variant
     belongs_to :line_item
 
+    delegate :order, to: :line_item
+
     has_many :transactions, class_name: 'Spree::GiftCardTransaction'
 
     validates :current_value, :original_value, :code, presence: true

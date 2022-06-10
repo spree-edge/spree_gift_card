@@ -3,7 +3,7 @@
 module Spree
   module GiftCardsHelper
     def variants_values(gift_card_variants)
-      gift_card_variants.map { |variant| ["#{variant.product.name}".downcase , variant.id] }
+      gift_card_variants.map { |variant| [variant.product.name.to_s.downcase, variant.id] }
     end
   end
 end

@@ -2,23 +2,15 @@
 
 module SpreeGiftCard
   class SendEmailJob < ApplicationJob
-    queue_as :default
+    queue_as :gift_card
 
-    def perform(*_args)
-      gift_cards = Spree::GiftCard
-                   .deliverable
-                   .where.not(line_item: nil)
+    def perform(gift_card_id)
+      gift_card = Spree::GiftCard.find_by(id: gift_card_id)
 
-      gift_cards.each do |gift_card|
-        next unless gift_card_shipped(gift_card)
-
+      if gift_card.present?
         order_id = gift_card.line_item.order.id
         Spree::OrderMailer.gift_card_email(gift_card.id, order_id).deliver_later
       end
-    end
-
-    def gift_card_shipped(gift_card)
-      gift_card.line_item.inventory_units.all?(&:shipped?)
     end
   end
 end
