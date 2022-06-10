@@ -2,7 +2,7 @@
 
 module Spree
   module OrderMailerDecorator
-    def gift_card_email(card_id, order_id)
+    def gift_card_receiver(card_id, order_id)
       @gift_card = Spree::GiftCard.find_by(id: card_id)
       @order = Spree::Order.find_by(id: order_id)
       subject = "#{Spree::Store.current.name} #{Spree.t('gift_card_email.subject')}"
@@ -10,8 +10,18 @@ module Spree
 
       mail(
         to: @gift_card.email,
-        from: "#{@gift_card.sender_name} <#{from_address}>",
-        reply_to: "#{@gift_card.sender_name} <#{@gift_card.sender_email}>",
+        from: from_address,
+        subject: subject
+      )
+    end
+
+    def gift_card_sender(card_id, order_id)
+      @gift_card = Spree::GiftCard.find_by(id: card_id)
+      @order = Spree::Order.find_by(id: order_id)
+      subject = "#{Spree::Store.current.name} Notification! Gift Card delivered!"
+      mail(
+        to: @gift_card.sender_email,
+        from: from_address,
         subject: subject
       )
     end

@@ -1,0 +1,7 @@
+<p>Hi <%= @gift_card.sender_name %>,</p>
+<p>
+  It is to notify you that your this Gift Card to <%= "#{@gift_card.name}" %> has been delivered.
+</p>
+
+<p>Best Regards </p>
+<p><%= Spree::Store.current.name %></p>

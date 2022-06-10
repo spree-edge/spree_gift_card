@@ -9,7 +9,9 @@ module SpreeGiftCard
 
       if gift_card.present?
         order_id = gift_card.line_item.order.id
-        Spree::OrderMailer.gift_card_email(gift_card.id, order_id).deliver_later
+
+        Spree::OrderMailer.gift_card_receiver(gift_card.id, order_id).deliver_later
+        Spree::OrderMailer.gift_card_sender(gift_card.id, order_id).deliver_later
       end
     end
   end
