@@ -184,6 +184,10 @@ module Spree
       %w[checkout pending].include?(payment.state)
     end
 
+    def display_gift_card_price(gc_price)
+      Spree::Money.new(gc_price, currency: self.variant.currency)
+    end
+
     private
 
     def redeem(user)
