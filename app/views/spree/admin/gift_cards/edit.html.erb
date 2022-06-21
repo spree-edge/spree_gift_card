@@ -4,6 +4,7 @@
 
 <% content_for :page_actions do %>
   <%= button_link_to Spree.t(:back_to_gift_cards_list), spree.admin_gift_cards_path, icon: 'arrow-left', class: 'btn btn-primary' %>
+  <%= button_link_to Spree.t(:resend), resend_admin_gift_card_url(@gift_card), method: :post, icon: 'envelope' %>
 <% end %>
 
 <%= render partial: 'spree/shared/error_messages', locals: { target: @gift_card } %>

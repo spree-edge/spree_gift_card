@@ -4,7 +4,7 @@ module Spree
   module Admin
     class GiftCardsController < Spree::Admin::ResourceController
       before_action :set_gift_card, :find_gift_card_variant, except: :destroy
-      before_action :find_gift_card, only: %i[edit show update]
+      before_action :find_gift_card, only: %i[edit show update resend]
 
       def create
         @object.assign_attributes(gift_card_params)
@@ -21,6 +21,20 @@ module Spree
       def update
         flash[:success] = Spree.t(:successfully_updated_gift_card) if @gift_card.update(gift_card_params)
         redirect_to admin_gift_cards_path
+      end
+
+      def resend
+        order = @gift_card.order
+
+        if order.present?
+          order.update_columns(gift_card_notified: false) # Reset notified flag.
+          order.gift_card_notification
+          flash[:success] = Spree.t(:gift_card_email_resent)
+        else
+          flash[:error] = Spree.t(:gift_card_order_not_found)
+        end
+
+        redirect_back fallback_location: spree.edit_admin_gift_card_url(@gift_card)
       end
 
       private
