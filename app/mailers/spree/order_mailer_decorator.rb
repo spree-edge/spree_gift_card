@@ -17,6 +17,8 @@ module Spree
 
     def gift_card_sender(card_id, order_id)
       @gift_card = Spree::GiftCard.find_by(id: card_id)
+      return unless @gift_card.sender_email
+
       @order = Spree::Order.find_by(id: order_id)
       subject = "#{Spree::Store.current.name} Notification! Gift Card delivered!"
       mail(

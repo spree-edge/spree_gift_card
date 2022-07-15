@@ -6,7 +6,7 @@
 <fieldset class="form-group">
   <%= f.label :email, Spree.t("recipient_email") %>
   <span class="required">*</span><br/>
-  <%= f.text_field :email, class: 'form-control' %>
+  <%= f.email_field :email, class: 'form-control' %>
 </fieldset>
 <fieldset class="form-group">
   <%= f.label :name, Spree.t("recipient_name") %>
@@ -16,7 +16,7 @@
 <fieldset class="form-group">
   <%= f.label :sender_email, Spree.t("sender_email") %>
   <span class="required">*</span><br/>
-  <%= f.text_field :sender_email, class: 'form-control' %>
+  <%= f.email_field :sender_email, class: 'form-control' %>
 </fieldset>
 <fieldset class="form-group">
   <%= f.label :sender_name, Spree.t("sender_name") %>

@@ -35,8 +35,8 @@
         <td class="d-none"><%= card.variant.product.is_e_gift_card %></td>
         <td><%= card.email %></td>
         <td><%= card.name %></td>
-        <td><%= card.sender_email %></td>
-        <td><%= card.sender_name %></td>
+        <td><%= card&.sender_email %></td>
+        <td><%= card&.sender_name %></td>
         <td><%= card.note %></td>
         <td class="actions">
           <%= link_to_edit card, no_text: true if can?(:edit, card) %>
