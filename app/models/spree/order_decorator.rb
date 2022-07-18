@@ -6,6 +6,8 @@ module Spree
       base.include Spree::Order::GiftCard
 
       base.after_update :gift_card_notification, if: :complete?
+
+      base.after_update :giftcard_state_completed, if: :complete?
     end
 
     def gift_card_notification
@@ -18,6 +20,14 @@ module Spree
       end
 
       update_columns(gift_card_notified: true)
+    end
+
+    def giftcard_state_completed
+      gift_cards = line_items.map(&:gift_card).compact
+
+      gift_cards.each do |gift_card|
+        gift_card.complete
+      end
     end
   end
 end

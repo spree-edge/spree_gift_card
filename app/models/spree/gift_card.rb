@@ -36,6 +36,14 @@ module Spree
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
     scope :deliverable, -> { where('sent_at IS NULL AND (delivery_on IS NULL OR delivery_on <= ?)', Time.now) }
+    scope :pending, -> { where(state: 'pending')}
+    scope :completed, -> { where(state: 'completed')}
+
+    state_machine :state, initial: :pending do
+      event :complete do
+        transition to: :completed, from: :pending
+      end
+    end
 
     def e_gift_card?
       variant.product.is_e_gift_card?
@@ -183,7 +191,7 @@ module Spree
     end
 
     def display_gift_card_price(gc_price)
-      Spree::Money.new(gc_price, currency: self.variant.currency)
+      Spree::Money.new(gc_price, currency: self&.variant&.currency.present? ? self.variant.currency : 'GBP')
     end
 
     private
