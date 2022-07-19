@@ -27,7 +27,8 @@ module Spree
       validates :email, email: true
     end
 
-    validates :email, :name, :note, presence: true
+    validates :email, :name, :sender_name, :sender_email, :note, presence: true
+    validates :sender_email, email: true
     validate :amount_remaining_is_positive, if: :current_value
 
     before_validation :generate_code, on: :create
