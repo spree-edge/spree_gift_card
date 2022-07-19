@@ -11,6 +11,7 @@
   <thead>
     <tr>
       <th><%= Spree.t(:order)%></th>
+      <th><%= I18n.t(:completed_at, scope: 'activerecord.attributes.spree/order') %></th>
       <th><%= Spree.t(:code) %></th>
       <th><%= Spree.t(:original_value) %></th>
       <th><%= Spree.t(:current_value) %></th>
@@ -25,8 +26,14 @@
   <tbody>
     <% @gift_cards.completed.each do |card| %>
       <tr id="<%= spree_dom_id card %>">
-        <% if card.line_item.present? && card.line_item.order.present? && card.line_item.order.completed? %>
+        <% order_completed = card.line_item.present? && card.line_item.order.present? && card.line_item.order.completed? %>
+        <% if order_completed %>
           <td><%= link_to card.line_item.order.number, edit_admin_order_path(card.line_item.order) %></td>
+        <% else %>
+          <td> <%= Spree.t(:admin_user) %> </td>
+        <% end %>
+        <% if order_completed %>
+          <td><%= card.line_item.order.completed_at %></td>
         <% else %>
           <td> <%= Spree.t(:admin_user) %> </td>
         <% end %>
