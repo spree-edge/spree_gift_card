@@ -25,7 +25,7 @@ Spree::CheckoutController.class_eval do
   end
 
   def payment_via_gift_card?
-    params[:state] == 'payment' &&
+    params[:state] == 'payment' && params[:order].present? &&
       params[:order].fetch(:payments_attributes, {}).present? &&
       params[:order][:payments_attributes].select { |payments_attribute| gift_card_payment_method.try(:id).to_s == payments_attribute[:payment_method_id] }.present?
   end
