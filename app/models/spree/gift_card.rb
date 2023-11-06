@@ -176,7 +176,7 @@ module Spree
     end
 
     def actions
-      %i[capture void]
+      %w{capture void}
     end
 
     def generate_authorization_code
