@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ['rahul@bluebash.co']
   s.homepage    = 'https://github.com/bluebash-spree-contrib/spree_gift_card'
 
-  spree_version = '~> 4.3.2'
+  spree_version = '>= 4.4.0'
 
   s.files       = `git ls-files`.split("\n")
   s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
