@@ -13,6 +13,10 @@ module SpreeGiftCard
       g.test_framework :rspec
     end
 
+    initializer 'spree_gift_card.environment', before: :load_config_initializers do |_app|
+      SpreeGiftCard::Config = SpreeGiftCard::Configuration.new
+    end
+
     def self.activate
       Dir.glob(File.join(File.dirname(__FILE__), '../../app/**/*_decorator*.rb')).sort.each do |c|
         Rails.configuration.cache_classes ? require(c) : load(c)

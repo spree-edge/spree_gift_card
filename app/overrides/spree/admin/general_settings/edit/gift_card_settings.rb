@@ -19,7 +19,7 @@ Deface::Override.new(
               <div class="card-body">
                 <div class="form-group">
                   <%= label_tag :allow_gift_card_redeem do %>
-                    <%= check_box_tag :allow_gift_card_redeem, 1, Spree::Config.allow_gift_card_redeem %>
+                    <%= check_box_tag :allow_gift_card_redeem, 1, SpreeGiftCard::Config.allow_gift_card_redeem %>
                     <%= Spree.t(:allow_gift_card_redeem) %>
                   <% end %>
                 </div>
