@@ -18,6 +18,10 @@ module Spree
         end
       end
 
+      def show; end
+
+      def edit; end
+
       def update
         flash[:success] = Spree.t(:successfully_updated_gift_card) if @gift_card.update(gift_card_params)
         redirect_to admin_gift_cards_path
@@ -40,7 +44,7 @@ module Spree
       private
 
       def collection
-        super.order(created_at: :desc).page(params[:page]).per(Spree::Config[:admin_orders_per_page])
+        super.order(created_at: :desc).page(params[:page]).per(Spree::Backend::Config[:admin_orders_per_page])
       end
 
       def set_gift_card

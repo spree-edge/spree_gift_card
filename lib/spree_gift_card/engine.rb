@@ -22,12 +22,18 @@ module SpreeGiftCard
       end
     end
 
-    initializer 'spree.register.payment_methods' do |app|
+    config.after_initialize do |app|
       app.config.spree.payment_methods << Spree::PaymentMethod::GiftCard
     end
 
     initializer 'spree.gift_card.permit_params' do |_app|
       Spree::PermittedAttributes.source_attributes << :code
+    end
+
+    initializer "spree.gift_card.add_preferences" do
+      Spree::Core::Configuration.class_eval do
+        preference :allow_gift_card_redeem, :boolean, default: true
+      end
     end
 
     config.to_prepare(&method(:activate).to_proc)

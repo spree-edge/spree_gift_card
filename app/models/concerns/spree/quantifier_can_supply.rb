@@ -3,7 +3,7 @@
 module Spree
   module QuantifierCanSupply
     def can_supply?(required = 1)
-      product = Spree::Variant.find(@variant).product
+      product = @variant.product
       if product.is_e_gift_card?
         true
       else
