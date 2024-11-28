@@ -9,7 +9,7 @@ module Spree
         payments.gift_cards.checkout.map(&:invalidate!)
         return unless gift_card.present?
 
-        payment_method = Spree::PaymentMethod::GiftCard.available.first
+        payment_method = ::Spree::PaymentMethod::GiftCard.available.first
         raise 'Gift Card payment method could not be found' unless payment_method
 
         amount_to_take = gift_card_amount(gift_card, outstanding_balance_after_applied_store_credit)

@@ -9,7 +9,7 @@ end
 
 gem 'rails-controller-testing'
 gem 'rubocop-rails', '~> 2.14', '>= 2.14.2'
-gem 'spree', '~> 4.1.3'
+gem 'spree', '~> 4.8'
 
 group :test do
   gem 'timecop', '~> 0.8.1'

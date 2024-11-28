@@ -241,9 +241,11 @@
           <%= f.error_message_on :tax_category %>
         <% end %>
       </div>
-      <p>
-        <%= f.check_box(:is_gift_card) %> <%= f.label :is_gift_card, Spree.t("is_gift_card")%>
-      </p>
+      <div data-hook="admin_product_form_is_gift_card">
+        <p>
+          <%= f.check_box :is_gift_card %> <%= f.label :is_gift_card, Spree.t("is_gift_card") %>
+        </p>
+      </div>
     </div>
 
   </div>

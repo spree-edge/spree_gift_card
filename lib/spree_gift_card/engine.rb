@@ -23,7 +23,7 @@ module SpreeGiftCard
     end
 
     config.after_initialize do |app|
-      app.config.spree.payment_methods << Spree::PaymentMethod::GiftCard
+      app.config.spree.payment_methods << ::Spree::PaymentMethod::GiftCard
     end
 
     initializer 'spree.gift_card.permit_params' do |_app|
