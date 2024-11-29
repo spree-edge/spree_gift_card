@@ -8,7 +8,7 @@ module SpreeGiftCard
       end
 
       def gift_card?
-        instance_of?(Spree::PaymentMethod::GiftCard)
+        instance_of?(::Spree::PaymentMethod::GiftCard)
       end
     end
   end

@@ -23,10 +23,10 @@ module SpreeGiftCard
         # Return to the Payments page if additional payment is needed.
         if @order.payments.valid.sum(:amount) < @order.total
           redirect_to checkout_state_path(@order.state)
-          flash[:success] = Spree.t('gift_card_added_partial')
+          flash[:success] = ::Spree.t('gift_card_added_partial')
           nil
         else
-          flash[:success] = Spree.t('gift_card_added')
+          flash[:success] = ::Spree.t('gift_card_added')
         end
       end
 
@@ -39,7 +39,7 @@ module SpreeGiftCard
       end
 
       def load_gift_card
-        @gift_card = Spree::GiftCard.find_by(code: params[:payment_source][gift_card_payment_method.try(:id).to_s][:code])
+        @gift_card = ::Spree::GiftCard.find_by(code: params[:payment_source][gift_card_payment_method.try(:id).to_s][:code])
         if @gift_card.nil?
           @gift_card = import_integrated_gift_card
         else
@@ -48,11 +48,11 @@ module SpreeGiftCard
 
         return if @gift_card
 
-        redirect_to checkout_state_path(@order.state), flash: { error: Spree.t('gift_code_not_found') } and return
+        redirect_to checkout_state_path(@order.state), flash: { error: ::Spree.t('gift_code_not_found') } and return
       end
 
       def gift_card_payment_method
-        @gift_card_payment_method ||= Spree::PaymentMethod.gift_card.available.first
+        @gift_card_payment_method ||= ::Spree::PaymentMethod.gift_card.available.first
       end
 
       def import_integrated_gift_card; end

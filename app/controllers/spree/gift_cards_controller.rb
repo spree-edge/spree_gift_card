@@ -60,7 +60,7 @@ module Spree
 
     def load_gift_card
       @gift_card = Spree::GiftCard.where(code: params[:id]).last
-      redirect_to root_path, flash: { error: Spree.t('gift_code_not_found') } unless @gift_card
+      redirect_to root_path, flash: { error: ::Spree.t('gift_code_not_found') } unless @gift_card
     end
 
     def find_gift_card_variants

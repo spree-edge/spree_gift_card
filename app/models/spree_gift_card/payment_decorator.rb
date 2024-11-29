@@ -4,7 +4,7 @@ module SpreeGiftCard
   module Spree
     module PaymentDecorator
       def self.prepended(base)
-        base.scope :gift_cards, -> { where(source_type: Spree::GiftCard.to_s) }
+        base.scope :gift_cards, -> { where(source_type: ::Spree::GiftCard.to_s) }
 
         base.delegate :gift_card?, to: :payment_method, allow_nil: true
       end
