@@ -1,0 +1,27 @@
+<p>Hi <%= @gift_card.name %>,</p>
+<p>
+  It is our pleasure to send you this Gift Card.
+  Don't delete this message -- you'll need the gift card code below to enjoy discounts on items available.
+  You may want to print a copy of this message for easy reference later.
+</p>
+<table cellspacing="0" cellpadding="0" border="0" width="650">
+  <tr>
+    <td style="width: 15%">Gift Card Amount:</td>
+    <td style="width: 85%"> <%= @gift_card.display_gift_card_price(@gift_card.price) %> </td>
+  </tr>
+  <tr>
+    <td style="width: 15%">Gift Code: </td>
+    <td style="width: 85%"> <%= @gift_card.code %> </td>
+  </tr>
+  <tr>
+    <td style="width: 15%">Senders Note:</td>
+    <td style="font-style: italic; width: 85%"> <%= @gift_card.note %> </td>
+  </tr>
+  <tr>
+    <td style="width: 15%">Sent By:</td>
+    <td style="width: 85%"> <%= @gift_card&.sender_email %> </td>
+  </tr>
+</table>
+
+<p>Best Regards </p>
+<p><%= Spree::Store.current.name %></p>

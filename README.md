@@ -9,6 +9,8 @@ SpreeGiftCard is an extension and one stop solution to integrate gift card funct
 
 * Recipient can then redeem the gift card by entering the unique gift card `Code` during checkout on payment step.
 
+* Removed deface dependency.
+
 ## Installation
 
 1. Just add this line to your `Gemfile`:

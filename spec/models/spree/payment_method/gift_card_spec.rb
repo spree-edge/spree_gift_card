@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Spree::PaymentMethod::GiftCard do
@@ -58,7 +60,10 @@ describe Spree::PaymentMethod::GiftCard do
     let(:auth_code) { gift_card_transaction.authorization_code }
 
     let(:authorized_amount) { capture_amount / 100.0 }
-    let(:gift_card_transaction) { create(:gift_card_transaction, gift_card: gift_card, amount: authorized_amount, action: Spree::GiftCard::AUTHORIZE_ACTION) }
+    let(:gift_card_transaction) do
+      create(:gift_card_transaction, gift_card: gift_card, amount: authorized_amount,
+                                     action: Spree::GiftCard::AUTHORIZE_ACTION)
+    end
     let(:gift_card) { create(:gift_card, current_value: authorized_amount, authorized_amount: authorized_amount) }
 
     context 'with an invalid auth code' do
@@ -190,7 +195,10 @@ describe Spree::PaymentMethod::GiftCard do
 
     let(:credit_amount) { gift_card.authorized_amount * 100 }
     let(:auth_code) { gift_card_transaction.authorization_code }
-    let(:gift_card_transaction) { create(:gift_card_transaction, gift_card: gift_card, amount: gift_card.authorized_amount, action: Spree::GiftCard::CAPTURE_ACTION) }
+    let(:gift_card_transaction) do
+      create(:gift_card_transaction, gift_card: gift_card, amount: gift_card.authorized_amount,
+                                     action: Spree::GiftCard::CAPTURE_ACTION)
+    end
     let(:gift_card) { create(:gift_card) }
 
     context 'with an invalid auth code' do

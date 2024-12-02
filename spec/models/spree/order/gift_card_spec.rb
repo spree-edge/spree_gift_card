@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'Order' do
   describe '#add_gift_card_payments' do
     let(:order_total) { 500.00 }
     let(:gift_card) { create(:gift_card) }
-    let(:gift_card_code) { "gc123" }
+    let(:gift_card_code) { 'gc123' }
 
     before { create(:gift_card_payment_method) }
 
@@ -92,12 +94,12 @@ describe 'Order' do
       let(:applicable_store_credit) { 10.0 }
 
       it 'deducts the applicable store credit' do
-        expect(subject.order_total_after_store_credit).to eq (order_total - applicable_store_credit)
+        expect(subject.order_total_after_store_credit).to eq(order_total - applicable_store_credit)
       end
     end
 
-    context "order has gift card payments" do
-      let(:gift_card_code) { "gc123" }
+    context 'order has gift card payments' do
+      let(:gift_card_code) { 'gc123' }
       let(:gift_card_total) { 20.0 }
       let(:variant) { create(:variant, price: gift_card_total) }
       let(:gift_card) { create(:gift_card, code: gift_card_code, variant: variant) }
@@ -113,14 +115,14 @@ describe 'Order' do
       end
 
       it 'deducts the applicable gift card payment amount' do
-        expect(subject.order_total_after_store_credit).to eq (order_total - gift_card_total)
+        expect(subject.order_total_after_store_credit).to eq(order_total - gift_card_total)
       end
 
       context "order's user has store credits" do
         let(:applicable_store_credit) { 10.0 }
 
         it 'deducts the applicable store credit' do
-          expect(subject.order_total_after_store_credit).to eq (order_total - applicable_store_credit - gift_card_total)
+          expect(subject.order_total_after_store_credit).to eq(order_total - applicable_store_credit - gift_card_total)
         end
       end
     end
@@ -143,7 +145,7 @@ describe 'Order' do
       subject { order }
 
       it 'returns the sum of the payment amounts' do
-        expect(subject.total_applied_gift_card).to eq (payment.amount + second_payment.amount)
+        expect(subject.total_applied_gift_card).to eq(payment.amount + second_payment.amount)
       end
     end
 
@@ -186,7 +188,7 @@ describe 'Order' do
     end
 
     it 'returns a negative amount' do
-      expect(subject.display_total_applied_gift_card.money.cents).to eq (total_applied_gift_card * -100.0)
+      expect(subject.display_total_applied_gift_card.money.cents).to eq(total_applied_gift_card * -100.0)
     end
   end
 
@@ -249,8 +251,8 @@ describe 'Order' do
         expect(order.payments.first.amount).to eq store_credit_total
       end
 
-      context "order has gift card payments" do
-        let(:gift_card_code) { "gc123" }
+      context 'order has gift card payments' do
+        let(:gift_card_code) { 'gc123' }
         let(:gift_card_total) { 20.0 }
         let(:variant) { create(:variant, price: gift_card_total) }
         let(:gift_card) { create(:gift_card, code: gift_card_code, variant: variant) }

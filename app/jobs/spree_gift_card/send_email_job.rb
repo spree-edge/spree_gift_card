@@ -1,24 +1,18 @@
+# frozen_string_literal: true
+
 module SpreeGiftCard
   class SendEmailJob < ApplicationJob
-    queue_as :default
+    queue_as :gift_card
 
-    def perform(*_args)
-      e_gift_card_product = Spree::Product.find_by_slug('e-gift-card')
-      return unless e_gift_card_product
+    def perform(gift_card_id)
+      gift_card = ::Spree::GiftCard.find_by(id: gift_card_id)
 
-      Spree::GiftCard.
-        deliverable.
-        where(variant: e_gift_card_product.master).
-        where.not(line_item: nil).
-        each do |gift_card|
-          next unless gift_card_shipped(gift_card)
-          order = gift_card.line_item.order
-          Spree::OrderMailer.gift_card_email(gift_card.id, order).deliver_later
-        end
-    end
+      if gift_card.present?
+        order_id = gift_card.line_item.order.id
 
-    def gift_card_shipped(gift_card)
-      gift_card.line_item.inventory_units.all?(&:shipped?)
+        ::Spree::OrderMailer.gift_card_receiver(gift_card.id, order_id).deliver_later
+        ::Spree::OrderMailer.gift_card_sender(gift_card.id, order_id).deliver_later
+      end
     end
   end
 end

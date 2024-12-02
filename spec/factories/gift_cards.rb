@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryGirl.define do
   factory :gift_card, class: Spree::GiftCard do
     email 'spree@example.com'
@@ -7,9 +9,9 @@ FactoryGirl.define do
   end
 
   factory :gift_card_payment_method, class: Spree::PaymentMethod::GiftCard do
-    type "Spree::PaymentMethod::GiftCard"
-    name "Gift Card"
-    description "Gift Card"
+    type 'Spree::PaymentMethod::GiftCard'
+    name 'Gift Card'
+    description 'Gift Card'
     active true
     auto_capture false
   end
@@ -20,7 +22,7 @@ FactoryGirl.define do
   end
 
   factory :gift_card_store_credit_category, class: Spree::StoreCreditCategory, parent: :store_credit_category do
-    name "Gift Card"
+    name 'Gift Card'
   end
 
   factory :gift_card_transaction, class: Spree::GiftCardTransaction do

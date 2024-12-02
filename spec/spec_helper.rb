@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Setup simplecov first to make sure coverage happens through everything.
 require 'simplecov'
 
@@ -13,7 +15,7 @@ end
 
 # Configure Rails Environment
 ENV['RAILS_ENV'] = 'test'
-require File.expand_path('../dummy/config/environment.rb',  __FILE__)
+require File.expand_path('dummy/config/environment.rb', __dir__)
 require 'rspec/rails'
 
 require 'database_cleaner'
@@ -24,7 +26,7 @@ require 'shoulda-matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
-Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].each { |f| require f }
+Dir[File.join(File.dirname(__FILE__), 'support/**/*.rb')].sort.each { |f| require f }
 
 # Requires factories defined in spree_core
 require 'spree/testing_support/factories'
@@ -36,7 +38,7 @@ require 'rspec/active_model/mocks'
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.include Spree::TestingSupport::UrlHelpers
-  config.extend Spree::TestingSupport::AuthorizationHelpers::Request, :type => :feature # once spree updates this can be removed
+  config.extend Spree::TestingSupport::AuthorizationHelpers::Request, type: :feature # once spree updates this can be removed
   config.color = true
   config.infer_spec_type_from_file_location!
 
@@ -44,11 +46,11 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
 
   config.before :each do |example|
-    if example.metadata[:js]
-      DatabaseCleaner.strategy = :truncation
-    else
-      DatabaseCleaner.strategy = :transaction
-    end
+    DatabaseCleaner.strategy = if example.metadata[:js]
+                                 :truncation
+                               else
+                                 :transaction
+                               end
     DatabaseCleaner.start
   end
 

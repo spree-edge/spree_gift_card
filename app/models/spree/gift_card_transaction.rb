@@ -1,6 +1,10 @@
-class Spree::GiftCardTransaction < ActiveRecord::Base
-  belongs_to :gift_card
-  belongs_to :order
+# frozen_string_literal: true
 
-  validates :amount, :gift_card, presence: true
+module Spree
+  class GiftCardTransaction < Spree::Base
+    belongs_to :gift_card
+    belongs_to :order
+
+    validates :amount, :gift_card, presence: true
+  end
 end

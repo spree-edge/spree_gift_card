@@ -42,3 +42,5 @@ en:
     successfully_created_gift_card: 'You have successfully created the gift card.'
     transactions: "Transactions"
     value: 'Value'
+    gift_card_email_resent: Gift card email resent
+    gift_card_order_not_found: Gift card order not found

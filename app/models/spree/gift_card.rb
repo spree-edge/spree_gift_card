@@ -1,19 +1,21 @@
-require 'spree/core/validators/email'
+# frozen_string_literal: true
 
 module Spree
-  class GiftCard < ActiveRecord::Base
-    include CalculatedAdjustments
+  class GiftCard < Spree::Base
+    include Spree::CalculatedAdjustments
     include Spree::GiftCard::Users
 
     UNACTIVATABLE_ORDER_STATES = %w[complete awaiting_return returned].freeze
-    AUTHORIZE_ACTION = 'authorize'.freeze
-    CAPTURE_ACTION = 'capture'.freeze
-    VOID_ACTION = 'void'.freeze
-    CREDIT_ACTION = 'credit'.freeze
+    AUTHORIZE_ACTION = 'authorize'
+    CAPTURE_ACTION = 'capture'
+    VOID_ACTION = 'void'
+    CREDIT_ACTION = 'credit'
     VALUES = [50, 100, 150, 200, 250, 300, 500, 1000].freeze
 
     belongs_to :variant
     belongs_to :line_item
+
+    delegate :order, to: :line_item
 
     has_many :transactions, class_name: 'Spree::GiftCardTransaction'
 
@@ -25,9 +27,8 @@ module Spree
       validates :email, email: true
     end
 
-    validates :email, :name, :sender_name, :sender_email, :note, presence: true, if: :e_gift_card?
-    validates :sender_email, email: true, if: :e_gift_card?
-
+    validates :email, :name, :sender_name, :sender_email, :note, presence: true
+    validates :sender_email, email: true
     validate :amount_remaining_is_positive, if: :current_value
 
     before_validation :generate_code, on: :create
@@ -35,7 +36,15 @@ module Spree
 
     scope :active, -> { where(active: true) }
     scope :inactive, -> { where(active: false) }
-    scope :deliverable, -> { active.where('sent_at IS NULL AND (delivery_on IS NULL OR delivery_on <= ?)', Time.now) }
+    scope :deliverable, -> { where('sent_at IS NULL AND (delivery_on IS NULL OR delivery_on <= ?)', Time.now) }
+    scope :pending, -> { where(state: 'pending')}
+    scope :completed, -> { where(state: 'completed')}
+
+    state_machine :state, initial: :pending do
+      event :complete do
+        transition to: :completed, from: :pending
+      end
+    end
 
     def e_gift_card?
       variant.product.is_e_gift_card?
@@ -61,6 +70,7 @@ module Spree
       authorization_code = options[:action_authorization_code]
       if authorization_code
         return true if transactions.find_by(action: AUTHORIZE_ACTION, authorization_code: authorization_code)
+
         errors.add(:base, Spree.t('gift_card_payment_method.unable_to_capture', auth_code: authorization_code))
         return false
       else
@@ -68,7 +78,8 @@ module Spree
       end
 
       if valid_authorization?(amount)
-        transaction = transactions.build(action: AUTHORIZE_ACTION, amount: amount, authorization_code: authorization_code)
+        transaction = transactions.build(action: AUTHORIZE_ACTION, amount: amount,
+                                         authorization_code: authorization_code)
         transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
         self.authorized_amount = authorized_amount + amount
         save!
@@ -89,6 +100,7 @@ module Spree
 
     def capture(amount, authorization_code, options = {})
       return false unless authorize(amount, action_authorization_code: authorization_code)
+
       if amount <= authorized_amount
         transaction = transactions.build(action: CAPTURE_ACTION, amount: amount, authorization_code: authorization_code)
         transaction.order = Spree::Order.find_by(number: options[:order_number]) if options[:order_number]
@@ -137,7 +149,10 @@ module Spree
     end
 
     def debit(amount, order = nil)
-      raise 'Cannot debit gift card by amount greater than current value.' if (amount_remaining - amount.to_f.abs) < 0
+      if (amount_remaining - amount.to_f.abs).negative?
+        raise 'Cannot debit gift card by amount greater than current value.'
+      end
+
       transaction = transactions.build
       transaction.amount = amount
       transaction.order  = order if order
@@ -152,7 +167,7 @@ module Spree
     def order_activatable?(order)
       order &&
         created_at < order.created_at &&
-        current_value > 0 &&
+        current_value.positive? &&
         !UNACTIVATABLE_ORDER_STATES.include?(order.state)
     end
 
@@ -161,7 +176,7 @@ module Spree
     end
 
     def actions
-      %i[capture void]
+      %w{capture void}
     end
 
     def generate_authorization_code
@@ -174,6 +189,10 @@ module Spree
 
     def can_capture?(payment)
       %w[checkout pending].include?(payment.state)
+    end
+
+    def display_gift_card_price(gc_price)
+      Spree::Money.new(gc_price, currency: self&.variant&.currency.present? ? self.variant.currency : 'GBP')
     end
 
     private
@@ -212,8 +231,8 @@ module Spree
     end
 
     def set_values
-      self.current_value ||= line_item.try(:price)
-      self.original_value ||= line_item.try(:price)
+      self.current_value ||= variant.try(:price)
+      self.original_value ||= variant.try(:price)
     end
 
     def amount_remaining_is_positive

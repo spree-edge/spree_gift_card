@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Spree::Core::Engine.routes.draw do
   resources :gift_cards do
     member do
@@ -15,6 +17,9 @@ Spree::Core::Engine.routes.draw do
 
   namespace :admin do
     resources :gift_cards do
+      member do
+        post :resend
+      end
       collection do
         get 'new-classic' => 'gift_cards#new', as: 'gift-card-new'
         get 'new-digital' => 'gift_cards#new', as: 'e-gift-card-new'

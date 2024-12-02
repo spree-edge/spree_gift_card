@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 module Spree
   # GiftCard class enhancement
-  class GiftCard < ActiveRecord::Base
+  class GiftCard < Spree::Base
     has_many :user_gift_cards
     has_many :users, through: :user_gift_cards
 

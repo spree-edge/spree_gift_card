@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
-describe "Add to Cart", js: true do
+describe 'Add to Cart', js: true do
   let(:product) { create :product, is_gift_card: true }
   let!(:variant) { create :variant, product: product }
 
@@ -17,7 +19,6 @@ describe "Add to Cart", js: true do
   end
 
   it 'contains number of items' do
-    expect(page).to have_content("(1)")
+    expect(page).to have_content('(1)')
   end
-
 end
