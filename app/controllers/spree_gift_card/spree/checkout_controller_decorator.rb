@@ -47,7 +47,6 @@ module SpreeGiftCard
         end
 
         return if @gift_card
-
         redirect_to checkout_state_path(@order.state), flash: { error: ::Spree.t('gift_code_not_found') } and return
       end
 
